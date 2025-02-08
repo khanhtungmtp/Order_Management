@@ -1,4 +1,5 @@
 using API.Data;
+using API.Models;
 using API.Models.Common;
 using Microsoft.EntityFrameworkCore.Storage;
 namespace API._Repositories
@@ -17,6 +18,10 @@ namespace API._Repositories
             Users = new Repository<User, DataContext>(_dbContext);
             RefreshTokens = new Repository<RefreshToken, DataContext>(_dbContext);
             SystemLanguages = new Repository<SystemLanguage, DataContext>(_dbContext);
+            Customers = new Repository<Customer, DataContext>(_dbContext);
+            Orders = new Repository<Order, DataContext>(_dbContext);
+            OrderDetails = new Repository<OrderDetail, DataContext>(_dbContext);
+            Products = new Repository<Product, DataContext>(_dbContext);
         }
 
         public IRepository<User> Users { get; set; } = default!;
@@ -31,6 +36,14 @@ namespace API._Repositories
         public IRepository<RefreshToken> RefreshTokens { get; set; } = default!;
 
         public IRepository<SystemLanguage> SystemLanguages { get; set; } = default!;
+
+        public IRepository<Customer> Customers { get; set; } = default!;
+
+        public IRepository<Order> Orders { get; set; } = default!;
+
+        public IRepository<OrderDetail> OrderDetails { get; set; } = default!;
+
+        public IRepository<Product> Products { get; set; } = default!;
 
         public async Task<bool> SaveChangesAsync()
         {

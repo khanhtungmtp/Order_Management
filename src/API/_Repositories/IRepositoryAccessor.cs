@@ -1,3 +1,4 @@
+using API.Models;
 using API.Models.Common;
 using Microsoft.EntityFrameworkCore.Storage;
 using static API.Configurations.DependencyInjectionConfig;
@@ -16,5 +17,9 @@ namespace API._Repositories
         IRepository<Permission> Permissions { get; }
         IRepository<SystemLanguage> SystemLanguages { get; }
         IRepository<RefreshToken> RefreshTokens { get; }
+        IRepository<Customer> Customers { get; }
+        IRepository<Order> Orders { get; }
+        IRepository<OrderDetail> OrderDetails { get; }
+        IRepository<Product> Products { get; }
     }
 }

@@ -23,12 +23,12 @@ public class Repository<T, DBContext> : IRepository<T> where T : class where DBC
         await _dbSet.AddAsync(entity);
     }
 
-    public void AddMany(IEnumerable<T> entities)
+    public void AddMany(List<T> entities)
     {
         _dbSet.AddRange(entities);
     }
 
-    public async Task AddManyAsync(IEnumerable<T> entities)
+    public async Task AddManyAsync(List<T> entities)
     {
         await _context.Set<T>().AddRangeAsync(entities);
     }

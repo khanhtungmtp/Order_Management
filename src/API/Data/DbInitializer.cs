@@ -1,4 +1,6 @@
-﻿using API.Models.Common;
+﻿using API.Helpers.Enum;
+using API.Models;
+using API.Models.Common;
 using Microsoft.AspNetCore.Identity;
 using static API.Helpers.Constants.SystemConstants;
 namespace API.Data;
@@ -35,7 +37,25 @@ public class DbInitializer(DataContext context,
         #endregion Quyền
 
         #region Người dùng
-
+        // user
+        var result1 = await _userManager.CreateAsync(new User
+        {
+            Id = Guid.NewGuid().ToString(),
+            UserName = "member",
+            FullName = "Thành viên",
+            Gender = Gender.Male,
+            IsActive = true,
+            DateOfBirth = new DateTime(1995, 03, 15),
+            PhoneNumber = "0987654321",
+            Email = "thanhvien@gmail.com",
+            LockoutEnabled = false
+        }, "@@Tung23");
+        if (result1.Succeeded)
+        {
+            User? user = await _userManager.FindByNameAsync("member");
+            if (user != null)
+                await _userManager.AddToRoleAsync(user, UserRoleName);
+        }
         if (!_userManager.Users.Any())
         {
             var result = await _userManager.CreateAsync(new User
@@ -56,6 +76,7 @@ public class DbInitializer(DataContext context,
                 if (user != null)
                     await _userManager.AddToRoleAsync(user, AdminRoleName);
             }
+
         }
 
         #endregion Người dùng
@@ -72,6 +93,7 @@ public class DbInitializer(DataContext context,
                     new() {Id = "SYSTEM_ROLE", Name = "Nhóm quyền",ParentId = "SYSTEM",Url = "/admin/system/role", Icon="team"},
                     new() {Id = "SYSTEM_FUNCTION", Name = "Chức năng",ParentId = "SYSTEM",Url = "/admin/system/function", Icon="folder-open"},
                     new() {Id = "SYSTEM_PERMISSION", Name = "Quyền hạn",ParentId = "SYSTEM",Url = "/admin/system/permission", Icon="unlock"},
+                    new() {Id = "ORDER_MANAGEMENT", Name = "Quản lý đơn hàng",ParentId = "ROOT",Url = "/admin/order-management", Icon="unlock"},
                 });
             await _context.SaveChangesAsync();
         }
@@ -89,6 +111,79 @@ public class DbInitializer(DataContext context,
         }
 
         #endregion Chức năng
+
+        #region Sản phẩm
+        if (!_context.Products.Any())
+        {
+            var products = new List<Product>
+                {
+                    new() { ProductName = "Iphone 16 128GB", Price = 15000000, StockQuantity = 10 },
+                    new() { ProductName = "Iphone 16 256GB", Price = 18000000, StockQuantity = 20 },
+                    new() { ProductName = "Iphone 16 Pro Max 512GB", Price = 30000000, StockQuantity = 15 },
+                };
+
+            _context.Products.AddRange(products);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Khách hàng
+        if (!_context.Customers.Any())
+        {
+            var customers = new List<Customer>
+                {
+                    new() { FullName = "Mai Quý Đôn", Email = "mai.don@example.com", PhoneNumber = "0123456789", Address = "Daknong Lâm Đồng" },
+                    new() { FullName = "Lê Minh Trí", Email = "lmtri97@example.com", PhoneNumber = "0987654321", Address = "An Giang" },
+                    new() { FullName = "Nguyễn Khanh Tùng", Email = "khanhtungmtp@example.com", PhoneNumber = "0111222333", Address = "Bình Dương" }
+                };
+
+            _context.Customers.AddRange(customers);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Đơn hàng
+        if (!_context.Orders.Any())
+        {
+            var customer = _context.Customers.FirstOrDefault();
+            if (customer != null)
+            {
+                var orders = new List<Order>
+                    {
+                        new() { CustomerId = customer.CustomerId, OrderDate = DateTime.Now, TotalAmount = 16500000, Status = OrderStatus.Completed },
+                        new() { CustomerId = customer.CustomerId, OrderDate = DateTime.Now, TotalAmount = 18500000, Status = OrderStatus.Pending },
+                        new() { CustomerId = customer.CustomerId, OrderDate = DateTime.Now, TotalAmount = 22000000, Status = OrderStatus.Canceled }
+                    };
+
+                _context.Orders.AddRange(orders);
+                await _context.SaveChangesAsync();
+
+                var orderDetails = new List<OrderDetail>
+                    {
+                        new() { OrderId = orders[0].OrderId, ProductId = _context.Products.First().ProductId, Quantity = 1, SubTotal = 100 },
+                        new() { OrderId = orders[1].OrderId, ProductId = _context.Products.Last().ProductId, Quantity = 2, SubTotal = 200 }
+                    };
+
+                _context.OrderDetails.AddRange(orderDetails);
+                await _context.SaveChangesAsync();
+            }
+        }
+        #endregion
+
+        #region Quyền truy cập
+
+        var permissions = new List<Permission>
+                {
+                    new("ORDER_MANAGEMENT", AdminRoleName, "CREATE"),
+                    new("ORDER_MANAGEMENT", AdminRoleName, "UPDATE"),
+                    new("ORDER_MANAGEMENT", AdminRoleName, "DELETE"),
+                    new("ORDER_MANAGEMENT", UserRoleName, "VIEW"),
+                };
+
+        _context.Permissions.AddRange(permissions);
+        await _context.SaveChangesAsync();
+
+        #endregion
 
         var functions = _context.Functions;
 

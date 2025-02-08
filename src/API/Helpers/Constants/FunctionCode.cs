@@ -9,4 +9,5 @@ public enum FunctionCode
     SYSTEM_FUNCTION,
     SYSTEM_LANGUAGE,
     SYSTEM_PERMISSION,
+    ORDER_MANAGEMENT,
 }

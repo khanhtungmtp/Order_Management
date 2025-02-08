@@ -17,8 +17,8 @@ public interface IRepository<T> where T : class
 
     void Add(T entity);
     Task AddAsync(T entity);
-    void AddMany(IEnumerable<T> entities);
-    Task AddManyAsync(IEnumerable<T> entities);
+    void AddMany(List<T> entities);
+    Task AddManyAsync(List<T> entities);
     void Update(T entity);
     void UpdateMany(List<T> entities);
     void Remove(T entity);

@@ -1,3 +1,4 @@
+using API.Models;
 using API.Models.Common;
 using API.Models.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +46,16 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<User>(opt
                    .HasKey(c => new { c.CommandId, c.FunctionId });
 
         builder.HasSequence("Forumsequence");
+
+        builder.Entity<OrderDetail>()
+            .HasOne(od => od.Order)
+            .WithMany(o => o.OrderDetails)
+            .HasForeignKey(od => od.OrderId);
+
+        builder.Entity<OrderDetail>()
+            .HasOne(od => od.Product)
+            .WithMany()
+            .HasForeignKey(od => od.ProductId);
     }
 
     public DbSet<Command> Commands => Set<Command>();
@@ -53,4 +64,8 @@ public class DataContext(DbContextOptions options) : IdentityDbContext<User>(opt
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<SystemLanguage> SystemLanguages => Set<SystemLanguage>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
 }
