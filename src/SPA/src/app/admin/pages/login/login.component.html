@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="lang">
+    <i nz-icon
+       nzTheme="outline"
+       nzType="font-size"></i>
+  </div>
+  <div class="content-layout">
+    <div class="head">
+      <img class="logo"
+           alt=""
+           src="./assets/imgs/logo.png" />
+      <span class="title">Base Admin</span>
+      <div class="desc"></div>
+    </div>
+  </div>
+  <!-- FORM LOGIN START -->
+  <div class="login-form-wrap">
+    <form class="login-form"
+          nz-form
+          [formGroup]="validateForm"
+          (ngSubmit)="login()">
+      <div class="login-form">
+
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Default：admin">
+            <nz-input-group nzPrefixIcon="user"
+                            [nzSize]="'large'">
+              <input type="text"
+                     formControlName="userName"
+                     nz-input
+                     placeholder="User name" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Default：123456">
+            <nz-input-group nzPrefixIcon="lock"
+                            [nzSize]="'large'">
+              <input type="password"
+                     autocomplete="on"
+                     formControlName="password"
+                    (keyup)="onKeyUp($event)"
+                     nz-input
+                     placeholder="Password" />
+            </nz-input-group>
+            @if (isCapsLockOn) {
+            <nz-alert nzType="warning"
+                      nzMessage="Caps Lock đang bật!"></nz-alert>
+            }
+          </nz-form-control>
+        </nz-form-item>
+
+      </div>
+      <div class="login-form-margin"
+           nz-row>
+        <div nz-col
+             [nzSpan]="12">
+          <label formControlName="remember"
+                 nz-checkbox>
+            <span>Remember</span>
+          </label>
+        </div>
+        <div nz-col
+             [nzSpan]="12">
+          <a class="login-form-forgot">Forget the password</a>
+        </div>
+      </div>
+      <button class="login-form-button login-form-margin"
+              nz-button
+              nzSize="large"
+              [nzType]="'primary'">{{ "login.login" | translate }}</button>
+    </form>
+  </div>
+
+</div>

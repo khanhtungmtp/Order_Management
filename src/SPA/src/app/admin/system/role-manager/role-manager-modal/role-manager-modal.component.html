@@ -1,0 +1,49 @@
+<form nz-form
+      autocomplete="off"
+      [formGroup]="addEditForm">
+  <nz-form-item>
+    <nz-form-label nzFor="id"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Id</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <input id="id"
+             formControlName="id"
+             nz-input
+             placeholder="Please enter a id" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label nzFor="name"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Name</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <input id="name"
+             formControlName="name"
+             nz-input
+             placeholder="Please enter a name" />
+    </nz-form-control>
+  </nz-form-item>
+
+</form>
+<ng-template #combineTpl
+             let-control>
+  @if (control.hasError('message')) {
+  {{ control.errors.message }}
+  }
+  @if (control.hasError('required')) {
+  Required fields
+  }
+  @if (errorMessage) {
+  {{ errorMessage }}
+  }
+</ng-template>
+@if (errorMessage) {
+<nz-alert nzType="error"
+          nzMessage="{{errorMessage}}"></nz-alert>
+}

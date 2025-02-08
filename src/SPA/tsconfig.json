@@ -1,0 +1,68 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@services/*": [
+        "src/app/_core/services/*"
+      ],
+      "@models/*": [
+        "src/app/_core/models/*"
+      ],
+      "@constants/*": [
+        "src/app/_core/constants/*"
+      ],
+      "@utilities/*": [
+        "src/app/_core/utilities/*"
+      ],
+      "@guards/*": [
+        "src/app/_core/guards/*"
+      ],
+      "@directives/*": [
+        "src/app/_core/directives/*"
+      ],
+      "@resolvers/*": [
+        "src/app/_core/resolvers/*"
+      ],
+      "@pipes/*": [
+        "src/app/_core/pipe/*"
+      ],
+      "@env/*": [
+        "src/environments/*"
+      ]
+    },
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "sourceMap": false,
+    "inlineSourceMap": false,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

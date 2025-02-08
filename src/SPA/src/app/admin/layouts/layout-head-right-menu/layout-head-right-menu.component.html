@@ -1,0 +1,133 @@
+<ng-container *ngTemplateOutlet="headRight"></ng-container>
+<ng-template #headRight>
+  <div id="tools"
+       class="bst-header-wrap">
+    <!--      <span *appScreenLessHidden="'375'" (click)="lockScreen()" class="bst-header-icon" nz-tooltip nzTooltipTitle="锁屏"
+            nzTooltipPlacement="bottom">
+         <i nz-icon nzType="lock"
+            nzTheme="outline"></i>
+        </span>-->
+
+    <span *appScreenLessHidden="'320'"
+          class="bst-header-icon"
+          nz-tooltip
+          nzTooltipPlacement="bottom"
+          nzTooltipTitle="search"
+          (click)="showSearchModal()">
+      <i nz-icon
+         nzTheme="outline"
+         nzType="search"></i>
+    </span>
+    <!--注释的是一个弹出外连接的按钮-->
+    <!-- <span *appScreenLessHidden="'375'" class="bst-header-icon" nz-tooltip nzTooltipTitle="OnChat的帮助文档"
+           nzTooltipPlacement="bottom">
+             <a href="https://docs.chat.hypergo.net/docs/intro/" target="_blank"><i nz-icon nzType="question-circle"
+                                                                                    nzTheme="outline"></i></a>
+           </span>-->
+    <span *appScreenLessHidden="'393'"
+          #toogleFullScreenDir="appToggleFullscreen"
+          class="bst-header-icon"
+          appToggleFullscreen
+          nz-tooltip
+          nzTooltipPlacement="bottom"
+          [nzTooltipTitle]="toogleFullScreenDir.isFullscreenFlag ? 'full screen' : 'Exit Full Screen'">
+      @if (toogleFullScreenDir.isFullscreenFlag) {
+      <i nz-icon
+         nzTheme="outline"
+         nzType="fullscreen"></i>
+      } @else {
+      <i nz-icon
+         nzTheme="outline"
+         nzType="fullscreen-exit"></i>
+      }
+    </span>
+
+    <span class="bst-header-icon"
+          nz-dropdown
+          nzPlacement="bottomRight"
+          nzTrigger="click"
+          [nzDropdownMenu]="noticeMenu">
+      <nz-badge class="bst-badge"
+                [nzCount]="11">
+        <i nz-icon
+           nzTheme="outline"
+           nzType="bell"></i>
+      </nz-badge>
+    </span>
+<span class="bst-header-icon"
+      nz-dropdown
+      [nzDropdownMenu]="language">
+  <img [src]="currentImageLange"
+       class="avatar"
+       alt="Language" />
+</span>
+<nz-dropdown-menu #language="nzDropdownMenu">
+  <ul nz-menu
+      nzSelectable>
+    @for (lang of listLanguage; track $index) {
+    <li nz-menu-item
+        [nzSelected]="currentLang === lang.id"
+        (click)="switchLang(lang.id)"><nz-avatar nzIcon="user"
+                 nzSrc="{{baseImage + lang.urlImage}}"></nz-avatar>{{lang.name}}</li>
+    }
+  </ul>
+</nz-dropdown-menu>
+
+    <span class="bst-header-icon"
+          nz-dropdown
+          [nzDropdownMenu]="userSettingMenu">
+      <img class="avatar"
+           alt=""
+           src="assets/imgs/logo.png" />
+      <span class="base-font-size">{{account.username}}</span>
+    </span>
+    <nz-dropdown-menu #userSettingMenu>
+      <ul nz-menu>
+        <li nz-menu-item>
+          <i class="m-r-8"
+             nz-icon
+             nzTheme="outline"
+             nzType="user"></i>
+          <span>Personal Center</span>
+        </li>
+        <li nz-menu-item>
+          <i class="m-r-8"
+             nz-icon
+             nzTheme="outline"
+             nzType="setting"></i>
+          <span>{{ "system.caption.setting" | translate }}</span>
+        </li>
+        <li nz-menu-item
+            (click)="changePassword()">
+          <i class="m-r-8"
+             nz-icon
+             nzTheme="outline"
+             nzType="lock"></i>
+          <span>{{ "system.caption.changePassword" | translate }}</span>
+        </li>
+        <li nz-menu-divider></li>
+        <li nz-menu-item
+            (click)="lockScreen()">
+          <i class="m-r-8"
+             nz-icon
+             nzTheme="outline"
+             nzType="lock"></i>
+          <span>{{ "system.caption.lockScreen" | translate }}</span>
+        </li>
+        <li nz-menu-item>
+          <div (click)="logOut()">
+            <i class="m-r-8"
+               nz-icon
+               nzTheme="outline"
+               nzType="logout"></i>
+            <span>{{ "login.logout" | translate }}</span>
+          </div>
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+
+  </div>
+  <nz-dropdown-menu #noticeMenu="nzDropdownMenu">
+    <app-home-notice></app-home-notice>
+  </nz-dropdown-menu>
+</ng-template>

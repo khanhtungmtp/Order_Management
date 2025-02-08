@@ -1,0 +1,35 @@
+<div class="flex center flex-coloum">
+  <nz-avatar [nzSize]="70"
+             [nzSrc]="'assets/imgs/default_face.png'"></nz-avatar>
+  <p class="sp-16 m-t-8">Khanhtung</p>
+
+  <form class="m-t-30 full-with p-l-25 p-r-24 m-b-20"
+        autocomplete="off"
+        nz-form
+        [formGroup]="validateForm"
+        [nzLayout]="'vertical'">
+    <nz-form-item>
+      <nz-form-label nzRequired>{{ 'system.caption.passwordLockScreen' | translate }}</nz-form-label>
+      <nz-form-control nzErrorTip="{{ 'system.message.passwordLockScreenRequied' | translate }}">
+        <nz-input-group [nzSuffix]="suffixTemplate">
+          <input name="password"
+                 autocomplete="off"
+                 formControlName="password"
+                 nz-input
+                 placeholder="{{'system.caption.pleaseEnterPlaceholder' | translate}}"
+                 [type]="passwordVisible ? 'text' : 'password'" />
+        </nz-input-group>
+        <ng-template #suffixTemplate>
+          <i nz-icon
+             [nzType]="!passwordVisible ? 'eye-invisible' : 'eye'"
+             (click)="passwordVisible = !passwordVisible"></i>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <button class="login-form-button full-with"
+            nz-button
+            nzSize="large"
+            [nzType]="'primary'"
+            (click)="submitForm()">{{'system.caption.lock' | translate}}</button>
+  </form>
+</div>

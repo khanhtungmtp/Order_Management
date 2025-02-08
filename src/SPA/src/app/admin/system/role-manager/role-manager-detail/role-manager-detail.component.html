@@ -1,0 +1,118 @@
+<app-page-header [backTpl]="backTpl"
+                 [backUrl]="urlRole"
+                 [pageHeaderInfo]="pageHeaderInfo"></app-page-header>
+<ng-template #backTpl>Back</ng-template>
+
+<div class="normal-table-wrap">
+  <nz-card class="m-b-10">
+      <app-water-mark />
+    <button nz-button
+            (click)="toggleExpandAll()">Toggle Expand/Collapse All</button>
+    <nz-table #dataTable
+              [nzShowPagination]="false"
+              [nzData]="functions">
+      <thead class="fixed-tab">
+        <tr>
+          <th>Chức năng</th>
+          <th style="text-align:center">
+            <label nz-checkbox
+                   [nzChecked]="checkedAll.view"
+                   (nzCheckedChange)="checkAll('VIEW', $event)">Xem</label>
+          </th>
+          <th style="text-align:center">
+            <label nz-checkbox
+                   [nzChecked]="checkedAll.create"
+                   (nzCheckedChange)="checkAll('CREATE', $event)">Thêm</label>
+          </th>
+          <th style="text-align:center">
+            <label nz-checkbox
+                   [nzChecked]="checkedAll.update"
+                   (nzCheckedChange)="checkAll('UPDATE', $event)">Sửa</label>
+          </th>
+          <th style="text-align:center">
+            <label nz-checkbox
+                   [nzChecked]="checkedAll.delete"
+                   (nzCheckedChange)="checkAll('DELETE', $event)">Xóa</label>
+          </th>
+          @if (isShowTHApprove) {
+          <th style="text-align:center">
+            <label nz-checkbox
+                   [nzChecked]="checkedAll.approve"
+                   (nzCheckedChange)="checkAll('APPROVE', $event)">Duyệt</label>
+          </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (rowData of dataTable.data;track rowData.id) {
+        @for (item of mapOfExpandedData[rowData.id];track item.id) {
+        @if ((item.parent && item.parent.expand) || !item.parent) {
+        <tr>
+          <td [nzIndentSize]="item.level! * 20"
+              [nzShowExpand]="!!item.children?.length"
+              [(nzExpand)]="item.expand"
+              (nzExpandChange)="collapse(mapOfExpandedData[rowData.id], item, $event)">
+            {{ item.name }}
+          </td>
+          <td style="text-align:center">
+            @if(item.hasView){
+            <label nz-checkbox
+                   (nzCheckedChange)="checkChanged($event,'VIEW',item.id)"
+                   [nzChecked]="handleChecked(item.id,  'VIEW')">
+            </label>
+            }
+          </td>
+          <td style="text-align:center">
+            @if (item.hasCreate) {
+            <label nz-checkbox
+                   (nzCheckedChange)="checkChanged($event,'CREATE',item.id)"
+                   [nzChecked]="handleChecked(item.id,  'CREATE')">
+            </label>
+            }
+          </td>
+          <td style="text-align:center">
+            @if (item.hasUpdate) {
+            <label nz-checkbox
+                   (nzCheckedChange)="checkChanged($event,'UPDATE',item.id)"
+                   [nzChecked]="handleChecked(item.id,  'UPDATE')">
+            </label>
+            }
+          </td>
+          <td style="text-align:center">
+            @if (item.hasDelete) {
+            <label nz-checkbox
+                   (nzCheckedChange)="checkChanged($event,'DELETE',item.id)"
+                   [nzChecked]="handleChecked(item.id, 'DELETE')">
+            </label>
+            }
+          </td>
+          @if (isShowTHApprove) {
+            <td style="text-align:center">
+              @if(item.hasApprove) {
+              <label nz-checkbox
+                     (nzCheckedChange)="checkChanged($event,'APPROVE',item.id)"
+                     [nzChecked]="handleChecked(item.id,  'APPROVE')">
+              </label>
+              }
+            </td>
+          }
+        </tr>
+        }
+        }
+        }
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<app-footer-submit>
+  <button class="right"
+          nz-button
+          nzType="primary"
+          (click)="savePermission()">Save</button>
+  <button class="right m-l-20"
+          nz-button
+          nzGhost
+          nzType="primary"
+          (click)="back()">Back</button>
+</app-footer-submit>
