@@ -1,0 +1,54 @@
+<!--Head section-->
+<app-page-header [pageHeaderInfo]="pageHeaderInfo" />
+
+<div class="normal-table-wrap">
+
+  <app-card-table-wrap [btnTpl]="tableBtns"
+                       [tableTitle]="'Order manager'"
+                       (reload)="reloadTable()">
+    <app-ant-table [checkedCashArrayFromComment]="checkedCashArray"
+                   [tableConfig]="tableConfig"
+                   [tableData]="dataList"
+                   (changePageNum)="getDataList($event)"
+                   (changePageSize)="changePageSize($event)"
+                   (selectedChange)="selectedChecked($event)"
+                   (sortFn)="changeSort($event)"></app-ant-table>
+    <ng-template #operationTpl
+                 let-orderId="orderId">
+      <span class="operate-text operate-custom"
+             (click)="viewRow(orderId)"><span nz-icon
+                  nzType="search" class="oprerate-view"
+                  nzTheme="outline"></span></span>
+      <span class="operate-text operate-custom"
+             (click)="deleteRow(orderId)"><span nz-icon
+                  nzType="delete" class="oprerate-delete"
+                  nzTheme="outline"></span></span>
+      <span class="operate-text operate-custom"
+             (click)="editModal(orderId)"><span nz-icon
+                  nzType="edit"
+                  nzTheme="outline"></span></span>
+    </ng-template>
+      <app-water-mark />
+  </app-card-table-wrap>
+
+
+  <ng-template #tableBtns>
+    <button *appHasRole="actionCode.FunctionCreate"
+            class="m-r-8"
+            nz-button
+            nzType="primary"
+            (click)="addModal()">
+      <i nz-icon
+         nzType="plus"></i>
+      New
+    </button>
+    <button *appHasRole="actionCode.FunctionDelete"
+            nz-button
+            nzType="default"
+           >
+      <i nz-icon
+         nzType="delete"></i>
+      delete
+    </button>
+  </ng-template>
+</div>

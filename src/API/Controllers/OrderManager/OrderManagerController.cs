@@ -3,6 +3,7 @@ using API.Dtos.OrderManager;
 using API.Filters.Authorization;
 using API.Helpers.Base;
 using API.Helpers.Constants;
+using API.Helpers.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.OrderManager;
@@ -14,6 +15,14 @@ public class OrderManagerController : BaseController
     public OrderManagerController(I_OrderManager functionService)
     {
         _orderService = functionService;
+    }
+
+    // url: GET : http:localhost:6001/api/order
+    [HttpGet]
+    [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.VIEW)]
+    public async Task<IActionResult> GetAllPaging([FromQuery] PaginationParam pagination)
+    {
+        return Ok(await _orderService.GetPagingAsync(pagination));
     }
 
     // url: POST : http://localhost:6001/api/order
@@ -31,6 +40,15 @@ public class OrderManagerController : BaseController
     public async Task<IActionResult> GetById(Guid orderId)
     {
         var result = await _orderService.FindByOrderIdAsync(orderId);
+        return HandleResult(result);
+    }
+
+    // url: GET : http:localhost:6001/api/order/details/{orderId}
+    [HttpGet("details/{orderId}")]
+    [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.VIEW)]
+    public async Task<IActionResult> GetOrderDetail(Guid orderId)
+    {
+        var result = await _orderService.FindByOrderDetailAsync(orderId);
         return HandleResult(result);
     }
 

@@ -1,0 +1,111 @@
+<form nz-form
+      [formGroup]="addEditForm">
+  <nz-form-item>
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24"
+                   nzRequired>orderId</nz-form-label>
+    <nz-form-control [nzSm]="18"
+                     [nzXs]="24"
+                     nzHasFeedback
+                     nzValidatingTip="Validating..."
+                     [nzErrorTip]="idErrorTpl">
+      <input nz-input
+             formControlName="orderId"
+             placeholder="orderId" />
+      <ng-template #idErrorTpl
+                   let-control>
+        @if (control.errors?.['required']) {
+        Please input your orderId!
+        }
+        @if (control.errors?.['duplicated']) {
+        The orderId is duplicated!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24"
+                   nzRequired>customerId</nz-form-label>
+    <nz-form-control [nzSm]="18"
+                     [nzXs]="24"
+                     nzHasFeedback
+                     nzValidatingTip="Validating..."
+                     [nzErrorTip]="nameErrorTpl">
+      <input nz-input
+             formControlName="customerId"
+             placeholder="customerId" />
+      <ng-template #nameErrorTpl
+                   let-control>
+        @if (control.errors?.['required']) {
+        Please input your customerId!
+        }
+        @if (control.errors?.['duplicated']) {
+        The customerId is duplicated!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+    <nz-form-item>
+    <nz-form-label nzFor="orderDate"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24" nzInputReadOnly="true">OrderDate</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-date-picker formControlName="orderDate"
+                      nzInputReadOnly="true"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24">totalAmount</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-input-number formControlName="totalAmount"
+                       [nzMin]="0"
+                       style="width: 100%"
+                       [nzStep]="1"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+    <nz-form-item>
+    <nz-form-label nzFor="status"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Status</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-radio-group formControlName="status">
+        <label nz-radio
+               [nzValue]="0">Pending</label>
+        <label nz-radio
+               [nzValue]="1">Completed</label>
+        <label nz-radio
+               [nzValue]="2">Canceled</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+ 
+</form>
+<ng-template #combineTpl
+             let-control>
+  @if (control.hasError('message')) {
+  {{ control.errors.message }}
+  }
+  @if (control.hasError('required')) {
+  Required fields
+  }
+  @if (errorMessage) {
+  {{ errorMessage }}
+  }
+</ng-template>
+@if (errorMessage) {
+<nz-alert nzType="error"
+          nzMessage="{{errorMessage}}"></nz-alert>
+}

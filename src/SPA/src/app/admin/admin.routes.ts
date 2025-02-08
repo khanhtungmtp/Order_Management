@@ -18,5 +18,13 @@ export const ADMIN_ROUTES: Routes = [
       title: 'system',
       headerDisplay: "none"
     }
+  },
+  {
+    path: 'order-manager',
+    loadChildren: () => import('./order-manager/order-manager.routes'),
+    data: {
+      title: 'order-manager',
+      headerDisplay: "none"
+    }
   }
 ];

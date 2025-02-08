@@ -7,7 +7,9 @@ public class OrderDetailDto
     public Guid OrderDetailId { get; set; }
     public Guid OrderId { get; set; }
     public Guid ProductId { get; set; }
-    [Range(1, int.MaxValue, ErrorMessage = "Quantity must be >=1")]
+    public string ProductName { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public int StockQuantity { get; set; }
     public int Quantity { get; set; }
     public decimal SubTotal { get; set; }
 }
