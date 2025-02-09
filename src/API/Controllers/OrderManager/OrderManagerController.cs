@@ -12,14 +12,14 @@ public class OrderManagerController : BaseController
 {
     private readonly I_OrderManager _orderService;
 
-    public OrderManagerController(I_OrderManager functionService)
+    public OrderManagerController(I_OrderManager orderService)
     {
-        _orderService = functionService;
+        _orderService = orderService;
     }
 
     // url: GET : http:localhost:6001/api/order
     [HttpGet]
-    [ClaimRequirement(FunctionCode.SYSTEM_FUNCTION, CommandCode.VIEW)]
+    [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.VIEW)]
     public async Task<IActionResult> GetAllPaging([FromQuery] PaginationParam pagination)
     {
         return Ok(await _orderService.GetPagingAsync(pagination));
@@ -43,6 +43,24 @@ public class OrderManagerController : BaseController
         return HandleResult(result);
     }
 
+    // url: GET : http:localhost:6001/api/order/products
+    [HttpGet("GetListProducts")]
+    [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.CREATE)]
+    public async Task<IActionResult> GetListProducts()
+    {
+        var result = await _orderService.GetListProductsAsync();
+        return HandleResult(result);
+    }
+
+    // url: GET : http:localhost:6001/api/order/products/{productId}
+    [HttpPost("GetTotalProducts")]
+    [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.CREATE)]
+    public async Task<IActionResult> GetTotalProducts([FromBody] ProductRequest request)
+    {
+        var result = await _orderService.GetTotalProducts(request);
+        return HandleResult(result);
+    }
+
     // url: GET : http:localhost:6001/api/order/details/{orderId}
     [HttpGet("details/{orderId}")]
     [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.VIEW)]
@@ -55,7 +73,7 @@ public class OrderManagerController : BaseController
     // url: PUT : http:localhost:6001/api/order/{orderId}
     [HttpPut]
     [ClaimRequirement(FunctionCode.ORDER_MANAGEMENT, CommandCode.UPDATE)]
-    public async Task<IActionResult> UpdateOrder([FromQuery] OrderManagerUpdateRequest request)
+    public async Task<IActionResult> UpdateOrder([FromBody] OrderManagerUpdateRequest request)
     {
         var result = await _orderService.PutAsync(request);
         return HandleResult(result);

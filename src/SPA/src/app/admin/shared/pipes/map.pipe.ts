@@ -22,6 +22,11 @@ export const enum MapKeyType {
 }
 
 export const MapSet = {
+  status: {
+    0: 'Pending',
+    1: 'Completed',
+    2: 'Canceled'
+  },
   gender: {
     0: 'Female',
     1: 'Male'

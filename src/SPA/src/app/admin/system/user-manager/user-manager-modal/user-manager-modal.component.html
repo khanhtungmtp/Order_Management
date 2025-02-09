@@ -91,6 +91,22 @@
              placeholder="Please enter a phone number" />
     </nz-form-control>
   </nz-form-item>
+ 
+  <nz-form-item>
+    <nz-form-label nzFor="phoneNumber"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Phone number</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <input id="phoneNumber"
+             formControlName="phoneNumber"
+             maxlength="11"
+             nz-input
+             placeholder="Please enter a phone number" />
+    </nz-form-control>
+  </nz-form-item>
 
   <nz-form-item>
     <nz-form-label nzFor="email"

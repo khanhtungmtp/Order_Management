@@ -14,4 +14,6 @@ public interface I_OrderManager
     Task<OperationResult> DeleteAsync(Guid orderId);
     Task<OperationResult<OrderDto>> FindByOrderIdAsync(Guid orderId);
     Task<OperationResult<List<OrderDetailDto>>> FindByOrderDetailAsync(Guid orderId);
+    Task<OperationResult<string>> GetTotalProducts(ProductRequest request);
+    Task<OperationResult<List<KeyValuePair<string, string>>>> GetListProductsAsync();
 }

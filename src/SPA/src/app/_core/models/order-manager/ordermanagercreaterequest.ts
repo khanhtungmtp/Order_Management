@@ -1,7 +1,7 @@
-import { OrderDetailDto } from "./orderdetaildto";
-
 export interface OrderManagerCreateRequest {
     customerId: string;
-    orderDetails: OrderDetailDto[];
+    productId: string;
+    quantity: number;
+    subTotal: number;
     totalAmount: number;
 }

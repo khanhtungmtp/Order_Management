@@ -33,31 +33,27 @@ public class S_OrderManager : BaseServices, I_OrderManager
 
             List<OrderDetail> orderDetails = [];
 
-            foreach (var od in request.OrderDetails)
+            var product = await _repoStore.Products.FindAsync(request.ProductId);
+            if (product == null)
+                return OperationResult<string>.BadRequest($"Product {request.ProductId} not found.");
+
+            if (product == null || product.StockQuantity < request.Quantity)
+                return OperationResult<string>.BadRequest($"Product {request.ProductId} is out of stock.");
+
+            request.SubTotal = request.Quantity * product.Price;
+            product.StockQuantity -= request.Quantity;
+
+            await _repoStore.SaveChangesAsync();
+
+            OrderDetail orderDetail = new()
             {
-                var product = await _repoStore.Products.FindAsync(od.ProductId);
-                if (product == null)
-                    return OperationResult<string>.BadRequest($"Product {od.ProductId} not found. Product Id: {od.ProductId}");
+                ProductId = request.ProductId,
+                Quantity = request.Quantity,
+                SubTotal = request.SubTotal
+            };
 
-                if (product == null || product.StockQuantity < od.Quantity)
-                    return OperationResult<string>.BadRequest($"Product {od.ProductId} is out of stock. Product Id: {od.ProductId}");
-
-                od.SubTotal = od.Quantity * product.Price;
-                product.StockQuantity -= od.Quantity;
-
-                await _repoStore.SaveChangesAsync();
-
-                OrderDetail orderDetail = new()
-                {
-                    ProductId = od.ProductId,
-                    Quantity = od.Quantity,
-                    SubTotal = od.SubTotal
-                };
-
-                order.OrderDetails.Add(orderDetail);
-                orderDetails.Add(orderDetail);
-            }
-
+            order.OrderDetails.Add(orderDetail);
+            orderDetails.Add(orderDetail);
             order.TotalAmount = order.OrderDetails.Sum(od => od.SubTotal);
             // Tổng số tiền phải >= 0.
             if (order.TotalAmount == 0)
@@ -112,13 +108,15 @@ public class S_OrderManager : BaseServices, I_OrderManager
          (x, c) => new { x.o, x.od, x.p, c })
          .Select(x => new OrderDetailDto()
          {
+             OrderDetailId = x.od.OrderDetailId,
+             CustomerName = x.c.FullName,
              ProductId = x.p.ProductId,
              ProductName = x.p.ProductName,
              Price = x.p.Price,
              StockQuantity = x.p.StockQuantity,
              OrderId = x.od.OrderId,
              Quantity = x.od.Quantity,
-             SubTotal = x.od.SubTotal
+             SubTotal_str = x.od.SubTotal.ToString("N0")
          }).ToListAsync();
         return OperationResult<List<OrderDetailDto>>.Success(rs, "Get order by orderId successfully.");
     }
@@ -139,19 +137,36 @@ public class S_OrderManager : BaseServices, I_OrderManager
         return OperationResult<OrderDto>.Success(order, "Get order by orderId successfully.");
     }
 
+    public async Task<OperationResult<List<KeyValuePair<string, string>>>> GetListProductsAsync()
+    {
+        var result = await _repoStore.Products.FindAll(true).Select(x => new KeyValuePair<string, string>(x.ProductId.ToString(), x.ProductName)).ToListAsync();
+        return OperationResult<List<KeyValuePair<string, string>>>.Success(result, "Get list products successfully.");
+    }
+
+    public async Task<OperationResult<string>> GetTotalProducts(ProductRequest request)
+    {
+        var data = await _repoStore.Products.FirstOrDefaultAsync(x => x.ProductId == request.ProductId);
+        if (data == null)
+            return OperationResult<string>.NotFound("Product not found.");
+        decimal total = request.Quantity * data.Price;
+        return OperationResult<string>.Success(total.ToString("N0"), "Get total products successfully.");
+    }
+
     public async Task<OperationResult<PagingResult<OrderDto>>> GetPagingAsync(PaginationParam pagination)
     {
-        IQueryable<Order>? query = _repoStore.Orders.FindAll(true);
-
-        List<OrderDto>? listFunctionVM = await query.Select(x => new OrderDto()
+        IQueryable<Order>? orders = _repoStore.Orders.FindAll(true);
+        IQueryable<Customer>? customers = _repoStore.Customers.FindAll(true);
+        var query = orders.Join(customers, o => o.CustomerId, c => c.CustomerId, (o, c) => new { o, c });
+        List<OrderDto>? listOrder = await query.Select(x => new OrderDto()
         {
-            OrderId = x.OrderId,
-            CustomerId = x.CustomerId,
-            OrderDate = x.OrderDate,
-            TotalAmount = x.TotalAmount,
-            Status = x.Status
+            OrderId = x.o.OrderId,
+            CustomerId = x.c.CustomerId,
+            CustomerName = x.c.FullName,
+            OrderDate = x.o.OrderDate,
+            TotalAmount = x.o.TotalAmount,
+            Status = x.o.Status
         }).ToListAsync();
-        PagingResult<OrderDto>? resultPaging = PagingResult<OrderDto>.Create(listFunctionVM, pagination.PageNumber, pagination.PageSize);
+        PagingResult<OrderDto>? resultPaging = PagingResult<OrderDto>.Create(listOrder, pagination.PageNumber, pagination.PageSize);
         return OperationResult<PagingResult<OrderDto>>.Success(resultPaging, "Get order successfully.");
 
     }

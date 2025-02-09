@@ -7,10 +7,10 @@ export default [
   {
     path: '',
     component: MainComponent,
-    title: 'Function',
+    title: 'ORDER MANAGEMENT',
     data: {
-      title: 'Function',
-      actionCode: ActionCode.FunctionView,
+      title: 'ORDER MANAGEMENT',
+      actionCode: ActionCode.OrderView,
     },
   }
 ] as Route[];

@@ -14,7 +14,7 @@ export class CustomPageTitleResolverService extends TitleStrategy {
   override updateTitle(routerState: RouterStateSnapshot): void {
     const title = this.buildTitle(routerState);
     if (title !== undefined) {
-      this.title.setTitle(`${title} - Base admin`);
+      this.title.setTitle(`${title} - ORDER MANAGEMENT`);
     }
   }
 }

@@ -5,6 +5,8 @@ import { OrderManagerCreateRequest } from '@app/_core/models/order-manager/order
 import { OrderManagerUpdateRequest } from '@app/_core/models/order-manager/ordermanagerupdaterequest';
 import { OrderDto } from '@app/_core/models/order-manager/orderdto';
 import { OrderDetailDto } from '@app/_core/models/order-manager/orderdetaildto';
+import { KeyValuePair } from '@app/_core/utilities/key-value-pair';
+import { ProductDto, ProductRequest } from '@app/_core/models/order-manager/productdto';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +23,26 @@ export class OrderService {
   getById(orderId: string) {
     return this.httpBase.get<OrderDto>(`OrderManager/${orderId}`);
   }
-  
+
   getOrderDetail(orderId: string) {
     return this.httpBase.get<OrderDetailDto[]>(`OrderManager/details/${orderId}`);
+  }
+
+  getListProducts() {
+    return this.httpBase.get<KeyValuePair[]>('OrderManager/GetListProducts');
+  }
+
+  getTotalProducts(request: ProductRequest) {
+    return this.httpBase.post<string>('OrderManager/GetTotalProducts', request);
   }
 
   add(request: OrderManagerCreateRequest) {
     return this.httpBase.post<string>('OrderManager', request, { needSuccessInfo: true, typeAction: 'add' });
   }
 
-  edit(orderId: string, request: OrderManagerUpdateRequest) {
-    return this.httpBase.put<string>(`OrderManager/${orderId}`, request, { needSuccessInfo: true, typeAction: 'edit' });
+  edit(request: OrderManagerUpdateRequest) {
+    return this.httpBase.put<string>(`OrderManager`, request, { needSuccessInfo: true, typeAction: 'edit' });
   }
-
   delete(orderId: string) {
     return this.httpBase.delete<string>(`OrderManager/${orderId}`);
   }

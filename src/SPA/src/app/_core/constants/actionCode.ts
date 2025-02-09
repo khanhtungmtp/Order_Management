@@ -10,4 +10,9 @@ export const ActionCode = {
   UserManagerView: 'SYSTEM_USER:VIEW',
   /*Role manager operation*/
   RoleManagerView: 'SYSTEM_ROLE:VIEW',
+  /*Order operation*/
+  OrderView: 'ORDER_MANAGEMENT:VIEW',
+  OrderCreate: 'ORDER_MANAGEMENT:CREATE',
+  OrderDelete: 'ORDER_MANAGEMENT:DELETE',
+  OrderUpdate: 'ORDER_MANAGEMENT:UPDATE',
 };

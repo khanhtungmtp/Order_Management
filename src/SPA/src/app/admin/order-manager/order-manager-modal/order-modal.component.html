@@ -1,6 +1,103 @@
 <form nz-form
       [formGroup]="addEditForm">
-  <nz-form-item>
+       <nz-form-item *ngIf="isAdd">
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24"
+                   nzRequired>Customer Name</nz-form-label>
+    <nz-form-control [nzSm]="18"
+                     [nzXs]="24"
+                     nzHasFeedback
+                     nzValidatingTip="Validating..."
+                     [nzErrorTip]="nameErrorTpl">
+      <input nz-input
+             formControlName="customerName"
+             placeholder="customerName" />
+      <ng-template #nameErrorTpl
+                   let-control>
+        @if (control.errors?.['required']) {
+        Please input your customerName!
+        }
+        @if (control.errors?.['duplicated']) {
+        The customerName is duplicated!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+
+   <nz-form-item *ngIf="isAdd">
+    <nz-form-label nzFor="phoneNumber"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Phone number</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <input id="phoneNumber"
+             formControlName="phoneNumber"
+             maxlength="11"
+             nz-input
+             placeholder="Please enter a phone number" />
+    </nz-form-control>
+  </nz-form-item>
+ 
+  <nz-form-item *ngIf="isAdd">
+    <nz-form-label nzFor="email"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Email</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <input id="email"
+             formControlName="email"
+             nz-input
+             placeholder="Please enter a email" />
+    </nz-form-control>
+
+  </nz-form-item>
+
+    <nz-form-item *ngIf="isAdd">
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24"
+                   nzRequired>address</nz-form-label>
+    <nz-form-control [nzSm]="18"
+                     [nzXs]="24"
+                     nzHasFeedback
+                     nzValidatingTip="Validating..."
+                     [nzErrorTip]="nameErrorTpl">
+      <input nz-input
+             formControlName="address"
+             placeholder="address" />
+      <ng-template #nameErrorTpl
+                   let-control>
+        @if (control.errors?.['required']) {
+        Please input your address!
+        }
+        @if (control.errors?.['duplicated']) {
+        The address is duplicated!
+        }
+      </ng-template>
+    </nz-form-control>
+  </nz-form-item>
+        <nz-form-item *ngIf="isAdd">
+    <nz-form-label nzFor="products"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24">Product</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-select formControlName="products"
+                 nzMode="default"
+                 nzPlaceHolder="Product">
+        @for (option of listProducts; track option) {
+        <nz-option [nzLabel]="option.label"
+                   [nzValue]="option.value"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item *ngIf="isEdit">
     <nz-form-label [nzSm]="4"
                    [nzXs]="24"
                    nzRequired>orderId</nz-form-label>
@@ -23,7 +120,7 @@
       </ng-template>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
+  <nz-form-item *ngIf="isEdit">
     <nz-form-label [nzSm]="4"
                    [nzXs]="24"
                    nzRequired>customerId</nz-form-label>
@@ -47,20 +144,33 @@
     </nz-form-control>
   </nz-form-item>
 
-    <nz-form-item>
-    <nz-form-label nzFor="orderDate"
-                   nzRequired
-                   [nzSm]="4"
-                   [nzXs]="24" nzInputReadOnly="true">OrderDate</nz-form-label>
+  <nz-form-item *ngIf="isAdd">
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24">Quantity</nz-form-label>
     <nz-form-control [nzErrorTip]="combineTpl"
                      [nzSm]="18"
                      [nzXs]="24">
-      <nz-date-picker formControlName="orderDate"
-                      nzInputReadOnly="true"></nz-date-picker>
+      <nz-input-number formControlName="quantity"
+                       [nzMin]="0"
+                       style="width: 100%"
+                       [nzStep]="1"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
-
-  <nz-form-item>
+ 
+  <nz-form-item *ngIf="isAdd">
+    <nz-form-label [nzSm]="4"
+                   [nzXs]="24">Total</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-input-number formControlName="total"
+                       [nzMin]="0"
+                       style="width: 100%"
+                       [nzStep]="1"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+ 
+  <nz-form-item *ngIf="isEdit">
     <nz-form-label [nzSm]="4"
                    [nzXs]="24">totalAmount</nz-form-label>
     <nz-form-control [nzErrorTip]="combineTpl"
@@ -89,6 +199,20 @@
         <label nz-radio
                [nzValue]="2">Canceled</label>
       </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  
+    <nz-form-item>
+    <nz-form-label nzFor="orderDate"
+                   nzRequired
+                   [nzSm]="4"
+                   [nzXs]="24" nzInputReadOnly="true">OrderDate</nz-form-label>
+    <nz-form-control [nzErrorTip]="combineTpl"
+                     [nzSm]="18"
+                     [nzXs]="24">
+      <nz-date-picker formControlName="orderDate"
+                      nzInputReadOnly="true"></nz-date-picker>
     </nz-form-control>
   </nz-form-item>
  

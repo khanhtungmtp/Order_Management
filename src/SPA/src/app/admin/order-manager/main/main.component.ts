@@ -52,6 +52,7 @@ import { OrderManagerModalService } from '../order-manager-modal/order-modal.ser
 })
 export class MainComponent implements OnInit {
   @ViewChild('operationTpl', { static: true }) operationTpl!: TemplateRef<NzSafeAny>;
+  @ViewChild('statusFlag', { static: true }) statusFlag!: TemplateRef<NzSafeAny>;
   actionCode = ActionCode;
   filter: string = '';
   isSearch: boolean = false;
@@ -162,11 +163,11 @@ export class MainComponent implements OnInit {
   // viewRow
   viewRow(id: string): void {
     this.dataService
-      .getById(id)
+      .getOrderDetail(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(res => {
         this.modalService
-          .show({ nzTitle: 'view order' }, res)
+          .view({ nzTitle: 'view order' }, res)
           .pipe(
             finalize(() => {
               this.tableLoading(false);
@@ -250,28 +251,29 @@ export class MainComponent implements OnInit {
     this.tableConfig = {
       headers: [
         {
-          title: 'orderId',
+          title: 'Mã đơn hàng',
           field: 'orderId',
           showSort: true
         },
         {
-          title: 'customerId',
-          field: 'customerId',
+          title: 'khách hàng',
+          field: 'customerName',
           showSort: true
         },
+        // {
+        //   title: 'orderDate',
+        //   field: 'orderDate',
+        //   tdClassList: ['operate-text'],
+        //   pipe: 'date:yyyy-MM-dd HH:mm'
+        // },
         {
-          title: 'orderDate',
-          field: 'orderDate',
-          tdClassList: ['operate-text'],
-          pipe: 'date:yyyy-MM-dd HH:mm'
-        },
-        {
-          title: 'totalAmount',
+          title: 'Tổng tiền',
           field: 'totalAmount'
         },
         {
-          title: 'status',
-          field: 'status'
+          title: 'Trạng thái',
+          field: 'status',
+          pipe: 'status'
         },
         {
           title: 'Operation',

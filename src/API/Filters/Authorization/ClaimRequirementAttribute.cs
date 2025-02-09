@@ -45,7 +45,7 @@ public class ClaimRequirementAttribute(FunctionCode functionCode, CommandCode co
             return;
         }
         var userPermissions = GetUserPermissions(_db, userId, _functionCode, _commandCode);
-        if (userPermissions == null)
+        if (userPermissions == null || userPermissions.Count == 0)
         {
             Unauthorize(context, trackId, httpContext, HttpStatusCode.Forbidden);
         }
